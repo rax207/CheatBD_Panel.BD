@@ -1,56 +1,46 @@
-"""
-CheatBD_Panel.BD — Simple Flask Home Page with Footer
-A minimal Flask web app showing a styled home page with a footer.
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    let cartTotal = 0;
+    let itemId = 0;
 
-Run:
-1. pip install flask
-2. python CheatBD_Panel.py
-3. Open http://127.0.0.1:5000
-"""
+    window.addToCart = function(price, gameName) {
+      console.log("Add to cart clicked:", gameName, price);
+      cartTotal += price;
+      itemId++;
+      const cartItem = document.createElement("div");
+      cartItem.className = "cart-item";
+      cartItem.id = "item-" + itemId;
+      cartItem.innerHTML = `
+        <span>✅ ${gameName} (+${price} TK)</span>
+        <button class="remove-btn" onclick="removeFromCart(${price}, 'item-${itemId}')">❌ Remove</button>
+      `;
+      document.getElementById("cart").appendChild(cartItem);
+      updateTotal();
+    };
 
-from flask import Flask, render_template_string
+    window.removeFromCart = function(price, itemId) {
+      const item = document.getElementById(itemId);
+      if (item) {
+        item.remove();
+        cartTotal -= price;
+        updateTotal();
+      }
+    };
 
-app = Flask(__name__)
+    function updateTotal() {
+      document.getElementById("total").innerText = "Total: " + cartTotal + " TK";
+    }
 
-# Inline HTML template
-HOME_HTML = """
-<!doctype html>
-<html lang='en'>
-<head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1'>
-  <title>CheatBD Panel</title>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css'>
-  <style>
-    body { background: #0e141b; color: #fff; display: flex; flex-direction: column; min-height: 100vh; }
-    .hero { background: linear-gradient(135deg, #111827, #1e293b); padding: 100px 0; }
-    .title, .subtitle { color: #fff; }
-    footer { background: #111827; padding: 20px 0; text-align: center; color: #9ca3af; margin-top: auto; }
-  </style>
-</head>
-<body>
-  <section class='hero is-fullheight-with-navbar'>
-    <div class='hero-body'>
-      <div class='container has-text-centered'>
-        <h1 class='title is-1'>Welcome to CheatBD Panel</h1>
-        <p class='subtitle is-4'>Your simple Flask-based dashboard starter</p>
-        <a href='#' class='button is-primary is-large'>Get Started</a>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class='content has-text-centered'>
-      <p>© 2025 CheatBD Panel. Built with ❤️ using Flask & Bulma.</p>
-    </div>
-  </footer>
-</body>
-</html>
-"""
-
-@app.route('/')
-def home():
-    return render_template_string(HOME_HTML)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    window.checkout = function() {
+      if (cartTotal === 0) {
+        alert("🛒 Your cart is empty!");
+        return;
+      }
+      alert("You need to Contact with us in what's app");
+      document.getElementById("cart").innerHTML = "";
+      cartTotal = 0;
+      updateTotal();
+      document.getElementById("contact").scrollIntoView({ behavior: "smooth" });
+    };
+  });
+</script>
